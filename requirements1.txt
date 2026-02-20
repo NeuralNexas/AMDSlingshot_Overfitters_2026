@@ -1,0 +1,86 @@
+# ===================================
+# DevOps - Self Healing Infrastructure
+# Python 3.11 Backend Requirements
+# ===================================
+#
+# LangFlow 1.1.2 is the heaviest dependency. It pins exact
+# versions of many shared libraries including:
+#   pydantic, pydantic-settings, httpx, openai, sqlalchemy,
+#   jinja2, markupsafe, tenacity, aiofiles, rich, networkx,
+#   langchain (full stack), numpy, pandas, and more.
+#
+# RULES:
+#   - LangFlow is listed FIRST so pip resolves its tree first.
+#   - We do NOT pin any package that LangFlow also manages.
+#   - All other packages use loose minimums (>=) only.
+#   - If pip still fails, remove the conflicting line here
+#     and let LangFlow's transitive dep satisfy it.
+#
+# Run:  pip install -r requirements.txt
+# ===================================
+
+# -----------------------------------
+# 1. Visual Workflow (LangFlow) -- ANCHOR PACKAGE
+# -----------------------------------
+langflow==1.1.2
+
+# -----------------------------------
+# 2. Backend (FastAPI)
+# -----------------------------------
+# fastapi & uvicorn are NOT pinned by LangFlow, safe to list.
+# pydantic, pydantic-settings, httpx are managed by LangFlow.
+# websockets -- managed by LangFlow (realtime/supabase requires <13)
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
+python-dotenv>=1.0.0
+python-multipart>=0.0.18
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+celery>=5.4.0
+redis>=5.2.0
+
+# -----------------------------------
+# 3. AI Agents (LLM + Logic)
+# -----------------------------------
+# langchain, langchain-core, langchain-community,
+# langchain-openai, openai -- ALL managed by LangFlow.
+langgraph>=0.2.60
+tiktoken>=0.8.0
+faiss-cpu>=1.9.0
+
+# -----------------------------------
+# 4. Visual Dashboard (Streamlit)
+# -----------------------------------
+streamlit>=1.41.0
+plotly>=5.24.0
+altair>=5.5.0
+
+# -----------------------------------
+# 5. Monitoring & Observability
+# -----------------------------------
+prometheus-client>=0.21.0
+psutil>=6.1.0
+docker>=7.1.0
+kubernetes>=31.0.0
+paramiko>=3.5.0
+
+# -----------------------------------
+# 6. Database & Storage
+# -----------------------------------
+# sqlalchemy, aiosqlite -- managed by LangFlow
+alembic>=1.14.0
+asyncpg>=0.30.0
+
+# -----------------------------------
+# 7. Utilities
+# -----------------------------------
+# The following are ALL managed by LangFlow's dependency tree
+# and must NOT be pinned here:
+#   tenacity (qianfan requires <9, langchain requires <10)
+#   aiofiles  (langflow-base pins its own version)
+#   rich      (chromadb / composio-core pull it in)
+#   pyyaml, jinja2, markupsafe
+#
+# Only list packages LangFlow does NOT bundle:
+loguru>=0.7.3
+croniter>=5.0.0
